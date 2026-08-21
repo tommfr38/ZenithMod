@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "zenithmod:bar_of_zenith"
+  },
+  "pattern": [
+    "BBB",
+    "B B"
+  ],
+  "result": {
+    "id": "zenithmod:zenith_helmet"
+  }
+}

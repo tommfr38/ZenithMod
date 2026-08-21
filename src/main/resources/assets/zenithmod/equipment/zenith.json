@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "zenithmod:zenith"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "zenithmod:zenith"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "zenithmod:zenith"
+      }
+    ]
+  }
+}

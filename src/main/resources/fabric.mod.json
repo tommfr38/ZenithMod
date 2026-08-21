@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "zenithmod",
+  "version": "${version}",
+  "name": "Zenith",
+  "description": "Adds the Bar of Zenith and the legendary Zenith Sword — 20 attack damage, 64 swings, and locked behind the Ender Dragon.",
+  "authors": [
+    "Tomi"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.tomi.zenithmod.ZenithMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
