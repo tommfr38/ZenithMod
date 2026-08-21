@@ -55,6 +55,34 @@ would otherwise be seven:
 **Craft it in a crafting table:** one book in the middle, 8 Bars of Zenith around it.
 That yields a Zenith's Power book, which you apply to the sword on an anvil.
 
+### The boost
+
+Hold right-click to draw the sword back, release to be thrown in the direction you are
+looking, like a firework under an elytra. Left-click still swings.
+
+The sword draws back over four stages across the first 9 ticks and then holds there for
+as long as you keep the button down. That is `getUseAnimation` returning `SPEAR` for the
+arm, plus a **model swap** in `assets/zenithmod/items/zenith_sword.json`: a
+`minecraft:range_dispatch` on `minecraft:use_duration` stepping through
+`zenith_sword_charging_1` to `_4`. The last threshold has nothing after it, so stage 4 is
+where it stays. The bow pulls the same way; the arm pose alone is nearly invisible on a
+flat sprite, so the model swap is what you actually see.
+
+- Wind-up is 5 ticks, a quarter second. Release earlier and nothing fires.
+- Cooldown is 3 seconds.
+
+- Costs one durability, taken down the same path as a swing, so Zenith's Power's
+  Unbreaking roll can skip it.
+- No fall protection. With an elytra you fly; without one you come back down the hard way.
+- Without the enchantment the sword right-clicks to nothing.
+
+The boost is applied on the client as well as the server, deliberately. A player's own
+movement is client-driven, so velocity set only on the server is overwritten on the next
+movement packet — which is exactly why vanilla's riptide launch runs on both sides too.
+
+This part cannot live in the enchantment JSON — no enchantment effect component moves the
+player — so it is item code in `ZenithSwordItem` that reads the enchantment.
+
 ### Why the sword is not in #minecraft:swords
 
 Removing it from that tag is what makes "only this enchantment" true. Every vanilla
