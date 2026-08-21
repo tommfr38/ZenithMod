@@ -37,40 +37,46 @@ returned, and the sword's remaining durability does not matter.
 **Block of Zenith** — 9 bars in a 3x3, and a shapeless recipe turns the block back into
 9 bars. Standard storage-block convention, so nothing is ever lost by crafting it.
 
-## Zenith's Strength
+## Zenith's Power
 
-A custom enchantment for the Zenith Sword: the sword loses durability on roughly one
-swing in five instead of every swing.
+The only enchantment the Zenith Sword can ever hold — one enchantment carrying what
+would otherwise be seven:
 
-Forge it on an **anvil**. Left slot: one Unbreaking III enchanted book. Right slot: 5 Bars
-of Zenith. Out comes a Zenith's Strength book, which you then apply to the sword on the
-anvil as normal. Costs 10 levels to forge.
+| Rolled in | Effect |
+| --- | --- |
+| Sharpness V | +3 attack damage |
+| Sweeping Edge III | sweeping damage ratio +0.75 |
+| Fire Aspect II | victim burns for 8 seconds |
+| Knockback II | +2 knockback |
+| Looting III | +3 loot rolls, and +3% equipment drop chance |
+| Unbreaking III | 75% chance to skip durability loss |
+| Mending | XP repairs at 2 durability per point |
 
-It is not available from the enchanting table, villagers or loot — the anvil is the only
-source, because the enchantment is in none of the vanilla enchantment tags.
+**Craft it in a crafting table:** one book in the middle, 8 Bars of Zenith around it.
+That yields a Zenith's Power book, which you apply to the sword on an anvil.
 
-Two things worth knowing:
+### Why the sword is not in #minecraft:swords
 
-- The saving is probabilistic, not a counter. Each swing has an 80% chance to skip the
-  durability loss, so it averages one point per five hits rather than guaranteeing it.
-  This is exactly how vanilla Unbreaking works.
-- It stacks with Unbreaking. Zenith's Strength plus Unbreaking III skips about 95% of
-  durability loss. Add `"exclusive_set"` to the enchantment JSON if you would rather they
-  be mutually exclusive.
+Removing it from that tag is what makes "only this enchantment" true. Every vanilla
+`enchantable/*` tag is fed by `#minecraft:swords`, so being outside it means Sharpness,
+Mending and the rest have nothing to bind to — the enchanting table offers nothing and
+the anvil rejects every other book. Zenith's Power binds through its own
+`supported_items` instead, which names the sword directly.
 
-Vanilla has no data-driven anvil recipes, so the forging step is a mixin on `AnvilMenu`
-(`net.tomi.zenithmod.mixin.AnvilMenuMixin`). The enchantment itself is plain datapack
-JSON at `data/zenithmod/enchantment/zeniths_strength.json`.
+That tag controls exactly one other thing in the game: `Player.isSweepAttack`. So
+`PlayerMixin` redirects that single tag check to also accept the sword, leaving every
+movement and cooldown condition untouched.
 
-## Enchanting
+### Why Looting needs a mixin
 
-`data/minecraft/tags/item/swords.json` appends the Zenith Sword to `#minecraft:swords`.
-That one tag cascades through the vanilla enchantable tags, so the sword gets exactly
-what a vanilla sword gets: Sharpness/Smite/Bane of Arthropods, Looting, Knockback,
-Fire Aspect, Sweeping Edge, Unbreaking, **Mending**, Curse of Vanishing — plus sweep
-attacks and normal anvil/grindstone behaviour.
+Looting's drop bonus is not something an enchantment grants by itself. Every mob loot
+table calls `minecraft:enchanted_count_increase` naming `minecraft:looting` outright, so
+no custom enchantment can trigger it. `EnchantmentHelperMixin` reports a Looting level of
+3 for a sword carrying Zenith's Power, which makes the bonus apply in modded loot tables
+as well as vanilla ones.
 
-Anvil repair material is the Bar of Zenith (`data/zenithmod/tags/item/zenith_repair_materials.json`).
+The other six fold in cleanly as ordinary datapack effects — see
+`data/zenithmod/enchantment/zeniths_power.json`.
 
 ## Tuning
 
