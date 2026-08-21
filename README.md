@@ -37,6 +37,31 @@ returned, and the sword's remaining durability does not matter.
 **Block of Zenith** — 9 bars in a 3x3, and a shapeless recipe turns the block back into
 9 bars. Standard storage-block convention, so nothing is ever lost by crafting it.
 
+## Zenith's Strength
+
+A custom enchantment for the Zenith Sword: the sword loses durability on roughly one
+swing in five instead of every swing.
+
+Forge it on an **anvil**. Left slot: one Unbreaking III enchanted book. Right slot: 5 Bars
+of Zenith. Out comes a Zenith's Strength book, which you then apply to the sword on the
+anvil as normal. Costs 10 levels to forge.
+
+It is not available from the enchanting table, villagers or loot — the anvil is the only
+source, because the enchantment is in none of the vanilla enchantment tags.
+
+Two things worth knowing:
+
+- The saving is probabilistic, not a counter. Each swing has an 80% chance to skip the
+  durability loss, so it averages one point per five hits rather than guaranteeing it.
+  This is exactly how vanilla Unbreaking works.
+- It stacks with Unbreaking. Zenith's Strength plus Unbreaking III skips about 95% of
+  durability loss. Add `"exclusive_set"` to the enchantment JSON if you would rather they
+  be mutually exclusive.
+
+Vanilla has no data-driven anvil recipes, so the forging step is a mixin on `AnvilMenu`
+(`net.tomi.zenithmod.mixin.AnvilMenuMixin`). The enchantment itself is plain datapack
+JSON at `data/zenithmod/enchantment/zeniths_strength.json`.
+
 ## Enchanting
 
 `data/minecraft/tags/item/swords.json` appends the Zenith Sword to `#minecraft:swords`.
