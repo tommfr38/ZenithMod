@@ -67,6 +67,14 @@ That tag controls exactly one other thing in the game: `Player.isSweepAttack`. S
 `PlayerMixin` redirects that single tag check to also accept the sword, leaving every
 movement and cooldown condition untouched.
 
+The tag alone is not a guarantee, though. A **creative-mode anvil skips the `canEnchant`
+check entirely** — vanilla sets its "may apply" flag to true whenever the player has
+infinite materials — and a sword enchanted under an older version keeps what it was
+given. So `ZenithSwordItem.inventoryTick` strips any enchantment that is not Zenith's
+Power. That closes both routes and anything else that writes to the stack.
+
+`/enchant` needs no handling: the command checks `canEnchant` and refuses.
+
 ### Why Looting needs a mixin
 
 Looting's drop bonus is not something an enchantment grants by itself. Every mob loot

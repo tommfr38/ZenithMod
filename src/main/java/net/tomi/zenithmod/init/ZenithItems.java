@@ -11,7 +11,9 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.tomi.zenithmod.ZenithMod;
+import net.tomi.zenithmod.item.ZenithSwordItem;
 
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public class ZenithItems {
@@ -39,7 +41,8 @@ public class ZenithItems {
      * -2.4F attack speed matches every vanilla sword.
      */
     public static final Item ZENITH_SWORD = register("zenith_sword",
-            props -> props.sword(ZENITH, 19.0F, -2.4F).rarity(Rarity.EPIC));
+            props -> props.sword(ZENITH, 19.0F, -2.4F).rarity(Rarity.EPIC),
+            ZenithSwordItem::new);
 
     public static final Item ZENITH_BLOCK = registerBlockItem("zenith_block", ZenithBlocks.ZENITH_BLOCK);
 
@@ -53,9 +56,14 @@ public class ZenithItems {
     }
 
     static Item register(String name, UnaryOperator<Item.Properties> extra) {
+        return register(name, extra, Item::new);
+    }
+
+    static Item register(String name, UnaryOperator<Item.Properties> extra,
+                         Function<Item.Properties, Item> factory) {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, ZenithMod.id(name));
         return Registry.register(BuiltInRegistries.ITEM, key,
-                new Item(extra.apply(new Item.Properties()).setId(key)));
+                factory.apply(extra.apply(new Item.Properties()).setId(key)));
     }
 
     public static void init() {
