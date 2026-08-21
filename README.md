@@ -9,7 +9,6 @@ Fabric mod for Minecraft **26.1.2**. Adds the Bar of Zenith and the legendary Ze
 | **Bar of Zenith** (`zenithmod:bar_of_zenith`) | Crafting material, animated rainbow texture, Rare. |
 | **Zenith Sword** (`zenithmod:zenith_sword`) | 20 attack damage, 64 durability, 1.6 attacks/sec, Epic. |
 | **Block of Zenith** (`zenithmod:zenith_block`) | Decorative. Diagonal rainbow that sweeps and pulses, light level 15, pickaxe-mined (diamond or better). |
-| **Zenith Armour** (helmet, chestplate, leggings, boots) | 512 durability on every piece. 4 / 9 / 7 / 4 armour, toughness 4, knockback resistance 0.1. |
 
 ## Recipes
 
@@ -38,9 +37,6 @@ returned, and the sword's remaining durability does not matter.
 **Block of Zenith** — 9 bars in a 3x3, and a shapeless recipe turns the block back into
 9 bars. Standard storage-block convention, so nothing is ever lost by crafting it.
 
-**Zenith armour** — the standard vanilla armour patterns in Bars of Zenith: 5 for the
-helmet, 8 for the chestplate, 7 for the leggings, 4 for the boots.
-
 ## Enchanting
 
 `data/minecraft/tags/item/swords.json` appends the Zenith Sword to `#minecraft:swords`.
@@ -49,18 +45,7 @@ what a vanilla sword gets: Sharpness/Smite/Bane of Arthropods, Looting, Knockbac
 Fire Aspect, Sweeping Edge, Unbreaking, **Mending**, Curse of Vanishing — plus sweep
 attacks and normal anvil/grindstone behaviour.
 
-The armour pieces are appended to `#minecraft:head_armor`, `#minecraft:chest_armor`,
-`#minecraft:leg_armor` and `#minecraft:foot_armor`, which cascades the same way: Protection,
-Thorns, the slot-specific enchantments, Unbreaking and Mending all apply.
-
 Anvil repair material is the Bar of Zenith (`data/zenithmod/tags/item/zenith_repair_materials.json`).
-
-## A note on the worn armour texture
-
-Item icons animate, because they live on the item atlas. The worn layers
-(`textures/entity/equipment/...`) are standalone textures, not atlas sprites, so they
-cannot use `.mcmeta` animation — the armour on your body is a static rainbow while the
-icons in your inventory cycle.
 
 ## Tuning
 
@@ -69,8 +54,6 @@ icons in your inventory cycle.
 - Durability and enchantability: the `ZENITH` `ToolMaterial` in the same file.
 - Bars per craft: the `count` in `data/zenithmod/recipe/bar_of_zenith.json`.
 - Block glow: the `lightLevel(state -> 15)` call in `ZenithBlocks`. Drop it for a dark block.
-- Armour durability and protection: `ARMOR_DURABILITY` and the `ZENITH_ARMOR` defense map
-  in `ZenithItems`.
 - Pulse speed: `frametime` in `zenith_block.png.mcmeta`. 1 tick per frame over 32 frames is
   one full pulse every 1.6s.
 - Static instead of animated textures: delete the two `.png.mcmeta` files and crop each

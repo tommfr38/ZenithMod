@@ -9,15 +9,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ToolMaterial;
-import net.minecraft.world.item.equipment.ArmorMaterial;
-import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentAsset;
-import net.minecraft.world.item.equipment.EquipmentAssets;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.Block;
 import net.tomi.zenithmod.ZenithMod;
 
-import java.util.Map;
 import java.util.function.UnaryOperator;
 
 public class ZenithItems {
@@ -37,34 +31,6 @@ public class ZenithItems {
             ZenithTags.ZENITH_REPAIR_MATERIALS
     );
 
-    /** Worn-layer textures live under assets/zenithmod/equipment/zenith.json. */
-    public static final ResourceKey<EquipmentAsset> ZENITH_ASSET =
-            ResourceKey.create(EquipmentAssets.ROOT_ID, ZenithMod.id("zenith"));
-
-    /**
-     * Armour tier for Zenith gear.
-     *
-     * <p>The base durability here is what vanilla would scale per slot; every piece
-     * overrides it with a flat {@link #ARMOR_DURABILITY} so all four match.
-     */
-    public static final ArmorMaterial ZENITH_ARMOR = new ArmorMaterial(
-            32,
-            Map.of(
-                    ArmorType.HELMET, 4,
-                    ArmorType.CHESTPLATE, 9,
-                    ArmorType.LEGGINGS, 7,
-                    ArmorType.BOOTS, 4,
-                    ArmorType.BODY, 9),
-            22,
-            SoundEvents.ARMOR_EQUIP_NETHERITE,
-            4.0F, // toughness, same as netherite
-            0.1F, // knockback resistance, same as netherite
-            ZenithTags.ZENITH_REPAIR_MATERIALS,
-            ZENITH_ASSET);
-
-    /** Every piece takes the same number of hits, as specified. */
-    public static final int ARMOR_DURABILITY = 512;
-
     public static final Item BAR_OF_ZENITH = register("bar_of_zenith",
             props -> props.rarity(Rarity.RARE));
 
@@ -75,20 +41,7 @@ public class ZenithItems {
     public static final Item ZENITH_SWORD = register("zenith_sword",
             props -> props.sword(ZENITH, 19.0F, -2.4F).rarity(Rarity.EPIC));
 
-    public static final Item ZENITH_HELMET = registerArmor("zenith_helmet", ArmorType.HELMET);
-    public static final Item ZENITH_CHESTPLATE = registerArmor("zenith_chestplate", ArmorType.CHESTPLATE);
-    public static final Item ZENITH_LEGGINGS = registerArmor("zenith_leggings", ArmorType.LEGGINGS);
-    public static final Item ZENITH_BOOTS = registerArmor("zenith_boots", ArmorType.BOOTS);
-
     public static final Item ZENITH_BLOCK = registerBlockItem("zenith_block", ZenithBlocks.ZENITH_BLOCK);
-
-    static Item registerArmor(String name, ArmorType type) {
-        // durability() comes after humanoidArmor() on purpose: it overwrites the
-        // per-slot number vanilla just set.
-        return register(name, props -> props.humanoidArmor(ZENITH_ARMOR, type)
-                .durability(ARMOR_DURABILITY)
-                .rarity(Rarity.EPIC));
-    }
 
     static Item registerBlockItem(String name, Block block) {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, ZenithMod.id(name));

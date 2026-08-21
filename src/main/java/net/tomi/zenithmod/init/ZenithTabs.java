@@ -18,13 +18,8 @@ public class ZenithTabs {
             ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.withDefaultNamespace("building_blocks"));
 
     public static void init() {
-        CreativeModeTabEvents.modifyOutputEvent(COMBAT).register(output -> {
-            output.accept(ZenithItems.ZENITH_SWORD);
-            output.accept(ZenithItems.ZENITH_HELMET);
-            output.accept(ZenithItems.ZENITH_CHESTPLATE);
-            output.accept(ZenithItems.ZENITH_LEGGINGS);
-            output.accept(ZenithItems.ZENITH_BOOTS);
-        });
+        CreativeModeTabEvents.modifyOutputEvent(COMBAT)
+                .register(output -> output.accept(ZenithItems.ZENITH_SWORD));
         CreativeModeTabEvents.modifyOutputEvent(INGREDIENTS)
                 .register(output -> output.accept(ZenithItems.BAR_OF_ZENITH));
         CreativeModeTabEvents.modifyOutputEvent(BUILDING_BLOCKS)
