@@ -39,80 +39,39 @@ returned, and the sword's remaining durability does not matter.
 
 ## Zenith's Power
 
-The only enchantment the Zenith Sword can ever hold — one enchantment carrying what
-would otherwise be seven:
+An enchantment that does exactly one thing: hold right-click to draw the Zenith Sword
+back, release to be thrown in the direction you are looking, like a firework under an
+elytra. Left-click still swings.
 
-| Rolled in | Effect |
-| --- | --- |
-| Sharpness V | +3 attack damage |
-| Sweeping Edge III | sweeping damage ratio +0.75 |
-| Fire Aspect II | victim burns for 8 seconds |
-| Knockback II | +2 knockback |
-| Looting III | +3 loot rolls, and +3% equipment drop chance |
-| Unbreaking III | 75% chance to skip durability loss |
-| Mending | XP repairs at 2 durability per point |
+**Craft it in a crafting table:** one book in the middle, 8 Bars of Zenith around it. That
+yields a Zenith's Power book, which you apply to the sword on an anvil.
 
-**Craft it in a crafting table:** one book in the middle, 8 Bars of Zenith around it.
-That yields a Zenith's Power book, which you apply to the sword on an anvil.
-
-### The boost
-
-Hold right-click to draw the sword back, release to be thrown in the direction you are
-looking, like a firework under an elytra. Left-click still swings.
-
-The sword draws back over four stages across the first 9 ticks and then holds there for
-as long as you keep the button down. That is `getUseAnimation` returning `SPEAR` for the
-arm, plus a **model swap** in `assets/zenithmod/items/zenith_sword.json`: a
-`minecraft:range_dispatch` on `minecraft:use_duration` stepping through
-`zenith_sword_charging_1` to `_4`. The last threshold has nothing after it, so stage 4 is
-where it stays. The bow pulls the same way; the arm pose alone is nearly invisible on a
-flat sprite, so the model swap is what you actually see.
-
-- Wind-up is 5 ticks, a quarter second. Release earlier and nothing fires.
-- Cooldown is 3 seconds.
-
-- Costs one durability, taken down the same path as a swing, so Zenith's Power's
-  Unbreaking roll can skip it.
+- 3 second cooldown.
+- Costs one durability, taken down the same path as a swing, so Unbreaking gets its roll.
 - No fall protection. With an elytra you fly; without one you come back down the hard way.
-- Without the enchantment the sword right-clicks to nothing.
+- Wind-up is 5 ticks. Release earlier and nothing fires.
+- The sword draws back over four stages across the first 9 ticks, then holds there for as
+  long as you keep the button down.
 
-The boost is applied on the client as well as the server, deliberately. A player's own
-movement is client-driven, so velocity set only on the server is overwritten on the next
-movement packet — which is exactly why vanilla's riptide launch runs on both sides too.
+It **stacks with everything else**. The sword is an ordinary sword as far as the game is
+concerned, so Sharpness, Looting, Fire Aspect, Mending and the rest apply normally from
+the enchanting table or an anvil, and Zenith's Power sits alongside them.
 
-This part cannot live in the enchantment JSON — no enchantment effect component moves the
-player — so it is item code in `ZenithSwordItem` that reads the enchantment.
+What Zenith's Power will *not* do is go on anything else. Its definition names
+`zenithmod:zenith_sword` as the only item it supports, so the anvil refuses it on any
+other weapon.
 
-### Why the sword is not in #minecraft:swords
+### How it is built
 
-Removing it from that tag is what makes "only this enchantment" true. Every vanilla
-`enchantable/*` tag is fed by `#minecraft:swords`, so being outside it means Sharpness,
-Mending and the rest have nothing to bind to — the enchanting table offers nothing and
-the anvil rejects every other book. Zenith's Power binds through its own
-`supported_items` instead, which names the sword directly.
+The enchantment JSON carries **no effects at all** — it exists to bind to the sword and be
+read. No enchantment effect component can move the player, so the launch is item code in
+`ZenithSwordItem` that checks for the enchantment.
 
-That tag controls exactly one other thing in the game: `Player.isSweepAttack`. So
-`PlayerMixin` redirects that single tag check to also accept the sword, leaving every
-movement and cooldown condition untouched.
-
-The tag alone is not a guarantee, though. A **creative-mode anvil skips the `canEnchant`
-check entirely** — vanilla sets its "may apply" flag to true whenever the player has
-infinite materials — and a sword enchanted under an older version keeps what it was
-given. So `ZenithSwordItem.inventoryTick` strips any enchantment that is not Zenith's
-Power. That closes both routes and anything else that writes to the stack.
-
-`/enchant` needs no handling: the command checks `canEnchant` and refuses.
-
-### Why Looting needs a mixin
-
-Looting's drop bonus is not something an enchantment grants by itself. Every mob loot
-table calls `minecraft:enchanted_count_increase` naming `minecraft:looting` outright, so
-no custom enchantment can trigger it. `EnchantmentHelperMixin` reports a Looting level of
-3 for a sword carrying Zenith's Power, which makes the bonus apply in modded loot tables
-as well as vanilla ones.
-
-The other six fold in cleanly as ordinary datapack effects — see
-`data/zenithmod/enchantment/zeniths_power.json`.
+The drawn-back pose is two things: `getUseAnimation` returning `SPEAR` for the arm, plus a
+model swap in `assets/zenithmod/items/zenith_sword.json` that range-dispatches on
+`minecraft:use_duration` through `zenith_sword_charging_1` to `_4` and holds at the last.
+The bow pulls the same way. The arm pose alone is nearly invisible on a flat sprite, so
+the model swap is what you actually see.
 
 ## Tuning
 

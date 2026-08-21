@@ -12,19 +12,14 @@ import net.tomi.zenithmod.ZenithMod;
 public class ZenithEnchantments {
 
     /**
-     * Defined in data/zenithmod/enchantment/zeniths_power.json — enchantments are datapack
-     * entries, so this is only the key used to look the holder up at runtime.
+     * Defined in data/zenithmod/enchantment/zeniths_power.json. The definition carries no
+     * effects of its own — it exists to bind to the Zenith Sword and be read here. The
+     * launch itself is item code, because no enchantment effect component moves the player.
      */
     public static final ResourceKey<Enchantment> ZENITHS_POWER =
             ResourceKey.create(Registries.ENCHANTMENT, ZenithMod.id("zeniths_power"));
 
-    /** The Looting level Zenith's Power stands in for. */
-    public static final int LOOTING_LEVEL = 3;
-
     public static boolean hasZenithsPower(ItemStack stack) {
-        if (!stack.is(ZenithItems.ZENITH_SWORD)) {
-            return false;
-        }
         ItemEnchantments enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         for (Holder<Enchantment> held : enchantments.keySet()) {
             if (held.is(ZENITHS_POWER)) {
